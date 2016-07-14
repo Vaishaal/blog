@@ -2,7 +2,7 @@
 layout: post
 title: "Using a matrix inequality for (small-scale) image classification"
 date: 2016-07-13
-visible: true 
+visible: false
 categories: ml
 ---
 
