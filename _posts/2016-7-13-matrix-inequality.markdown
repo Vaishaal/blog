@@ -37,17 +37,18 @@ What is the simplest map we can think of?
 
 LINEAR!
 
-That is we want to find a $W$ such that $Wx$ is close to $y$, the label vector.
+That is we want to find a $W$ such that $xW$ is close to $y$, the label vector.
 
-Particularly we want the maximal index of $Wx$ to be the same as the maximal index
+Particularly we want the maximal index of $xW$ to be the same as the maximal index
 of $y$.
 
-Now I wave my hands and claim that L2 error is a decent metric. So we can formulate
-an optimization problem.
+Another way to state this is that we want $\|xW - y\|_{2}^{2}$ to be small.
+
+We can formulate an optimization problem.
 
 <p>
 So lets try to minimize
-$ \frac{1}{2} \|XW - Y\|_{F}^{2} + \lambda \|W\|^{2}_{F}$
+$\frac{1}{2} \|XW - Y\|_{F}^{2} + \lambda \|W\|^{2}_{F}$
 </p>
 
 Note I added a *penalty* term, this is very common.
@@ -146,7 +147,7 @@ That is:
 We can let $A = \Phi_{k}(X)$, note A is now $50000 \times 4096k$
 
 
-Remember we want to minimize $\|AW - Y\|_{F}^{2} + \lambda\|W\|$
+Remember we want to minimize $\|\|AW - Y\|\|_{F}^{2} + \lambda\|W\|$
 
 Our previous calculus tells us $W^{*} = (A^{T}A + \lambda I_{4096k})^{-1}A^{T}Y$
 
@@ -161,7 +162,7 @@ $\hat{Y} = AA^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
 
 Thus our new linear model looks like:
 
-$C = A^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
+$W = A^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
 
 Now we never have to invert anything greater than $50k \times 50k$ !
 
@@ -169,13 +170,25 @@ Now we never have to invert anything greater than $50k \times 50k$ !
 
 ```
 >>> A = phik(X)
->>> C = A.t * np.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y)
+>>> W = A.t * np.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y)
 >>> predictedTestLabels= np.argmax(phik(Xtest).dot(C), axis=1)
 >>> (predictedTestLabels == labels)/(1.0*len(labels))
 0.80
 ```
 
 yay!
+
+
+
+There are a couple key details I left out of this post.
+One is the actual efficient computation of $\Phi$, this step can
+be easily parallelized or sped up using vector operations.
+
+The actual observed behavior is that the test accuracy climbs as the number of
+random features are accumulated, so we want to push $k$ as large as possible.
+But we want to avoid memory problems when $n \times d$ gets too large.
+
+I will cover both issues in my next post.
 
 
 
