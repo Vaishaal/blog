@@ -91,7 +91,7 @@ that can be done in one line of python.
 ```
 ####How did it do?
 ```
->>> (predictedTestLabels == labels)/(1.0*len(labels))
+>>> (predictedTestLabels == labels)/float(len(labels))
 0.23
 ```
 
@@ -119,7 +119,7 @@ for an output dimension of $4096$.
 ```
 >>> W = scipy.linalg.solve(phi(X, seed=0), Y)
 >>> predictedTestLabels = argmax(phi(Xtest, seed=0).dot(W), axis=1)
->>> (predictedTestLabels == labels)/(1.0*len(labels))
+>>> (predictedTestLabels == labels)/float(len(labels))
 0.65
 ```
 
@@ -172,7 +172,7 @@ Now we never have to invert anything greater than $50k \times 50k$ !
 >>> A = phik(X)
 >>> W = A.t * np.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y)
 >>> predictedTestLabels= np.argmax(phik(Xtest).dot(C), axis=1)
->>> (predictedTestLabels == labels)/(1.0*len(labels))
+>>> (predictedTestLabels == labels)/float(len(labels))
 0.80
 ```
 
