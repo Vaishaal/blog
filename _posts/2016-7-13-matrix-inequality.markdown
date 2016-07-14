@@ -14,7 +14,7 @@ model to classify these images.
 
 For reference, the images look like this:
 </p>
-<img src="/assets/images/cifar_frog.png" width="256" id="cifar_frog">
+<img src="{{site.baseurl}}/assets/images/cifar_frog.png" width="256" id="cifar_frog">
 <p>
 
 #### Problem Formulation
