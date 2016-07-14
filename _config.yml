@@ -10,6 +10,10 @@ baseurl: /
 domain_name: 'http://vaishaal.com'
 google_analytics: 'UA-XXXXXXXX-X'
 
+# Gems
+gems: [jekyll-paginate]
+
 # Details for the RSS feed generator
 url:            'blog.vaishaal.com'
 author:         'Vaishaal Shankar'
+
