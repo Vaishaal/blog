@@ -18,7 +18,7 @@ For reference, the images look like this:
 <p>
 
 #### Problem Formulation
-We can represent each image as a vector in $R^{32 \times 32 \times 3}$
+We can represent each image as a vector in $R^{32 \times 32 \times 3}$ (a 3072 dimensional vector).
 Then we stack all these images into a $50000 \times 3072$ matrix and call it $X$
 
 We can let Y be a $50000 \times 10$ matrix of corresponding [one hot encoded](http://stackoverflow.com/questions/17469835/one-hot-encoding-for-machine-learning) image labels.
@@ -37,7 +37,7 @@ What is the simplest map we can think of?
 
 LINEAR!
 
-That is we want to find a $W$ such that $xW$ is close to $y$, the label vector.
+That is we want to find a matrix $W$ such that $xW$ is close to $y$, the label vector.
 
 Particularly we want the maximal index of $xW$ to be the same as the maximal index
 of $y$.
