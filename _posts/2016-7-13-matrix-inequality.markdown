@@ -96,6 +96,7 @@ that can be done in one line of python.
 ```
 
 ...Ouch
+
 ####Strawman++
 
 Unfortunately the raw space  these image-vectors live in isn't very good for
@@ -103,16 +104,16 @@ linear classification, so our model will perform poorly. So lets "lift" our data
 to a "better" space.
 
 Let $\Phi$ be a featurization function, that will "lift" our data. I've
-heard neural networks work well for this task, so I'll let $\Phi$ be a convolutional neural net
+heard neural networks work well for this task, so I'll let $\Phi$ be a convolutional neural net (cnn)
 
-I'm lazy so I don't have time to add a lot of layers, so it'll be a one layer conv net,
-and pool to 2 x 2.
+I'm lazy so I don't have time to add a lot of layers, so it'll be a one layer CNN.
+
 
 Furthermore I'm really lazy so I'm not going to train the network.  So $\Phi$ is a
 *random*, *single layer* convolutional neural network.
 
-The network will use $6 x 6$ patches, $1024$ filters, a cosine nonlinearity and average pool to 2 x 2
-for an output dimension of $4096$.
+Specifically I used a network with $6 x 6$ patches, $1024$ filters, a cosine nonlinearity and a average pooler to $2 x 2$.
+This will make the output dimension $4096$
 
 #### How did it do?
 
