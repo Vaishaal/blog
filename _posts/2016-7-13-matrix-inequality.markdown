@@ -33,7 +33,7 @@ Now the task is to build a <i>generalizable</i> map from $X_i \to Y_i$
 
 #### Strawman
 
-What is the dumbest map we can think of?
+What is the simplest map we can think of?
 
 LINEAR!
 
