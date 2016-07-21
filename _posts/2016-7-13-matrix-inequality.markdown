@@ -45,7 +45,7 @@ That is we want to find a matrix $W$ such that $xW$ is close to $y$, the label v
 Particularly we want the maximal index of $xW$ to be the same as the maximal index
 of $y$.
 
-Another way to state this is that we want $\|xW - y\|_{2}^{2}$ to be small.
+Another way to state this is that we want $\|\|xW - y\|\|_{2}^{2}$ to be small.
 
 We can formulate an optimization problem.
 
@@ -60,8 +60,16 @@ term is necessary. Note the $_F$ simply means I will be using the [Frobenius nor
 which means I'll treat the matrices XW and Y as large vectors and use the standard euclidean
 norm.
 
+Note:
+$\|X\|_{F}^{2} = Tr(X^{T}X)$
+
+Where $Tr$ is the trace.
+
+
 #### Strawman solution
 We can find the optimum solution with some matrix calculus:
+
+
 
 First expand
 
@@ -85,7 +93,8 @@ This is satisfied when:
 
 $W =  (X^{T}X +  I_{d}\lambda)^{-1}X^{T}Y$
 
-Which would be our optimum. Since $d$ in this case is only $3072$ this is a quick and easy computation
+Which would be our optimum. Since $d$ in this case is only $3072$ this is a quick and easy computation. Note the penalty term makes our matrix invertible when $X^{T}X$
+is singular.
 that can be done in one line of python.
 
 ```
