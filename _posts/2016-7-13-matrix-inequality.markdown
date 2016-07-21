@@ -127,7 +127,7 @@ Furthermore I'm really lazy so I'm not going to train the network.  So $\Phi$ is
 *random*, *single layer* convolutional neural network.
 
 <p>
-Specifically I used a network with $6 x 6$ patches, $1024$ filters, a RELU nonlinearity and a max pooler to $2 x 2$.
+Specifically I used a network with $6 x 6$ patches, $1024$ filters, a RELU nonlinearity and a average pooler to $2 x 2$.
 This will make the output dimension $4096$
 </p>
 
