@@ -22,7 +22,7 @@ For reference, the images look like this:
 <p>
 
 #### Problem Formulation
-We can represent each image as a vector in $R^{32 \times 32 \times 3}$ (a 3072 dimensional vector).
+We can represent each image as a vector in $\mathrm{R}^{32 \times 32 \times 3}$ (a 3072 dimensional vector).
 Then we stack all these images into a $50000 \times 3072$ matrix and call it $X$
 
 We can let Y be a $50000 \times 10$ matrix of corresponding [one hot encoded](http://stackoverflow.com/questions/17469835/one-hot-encoding-for-machine-learning) image labels.
@@ -62,9 +62,9 @@ which means I'll treat the matrices XW and Y as large vectors and use the standa
 norm.
 
 Note:
-$\|\|X\|\|_{F}^{2} = Tr(X^{T}X)$
+$\|\|X\|\|_{F}^{2} = \mathrm{Tr}(X^{T}X)$
 
-Where $Tr$ is the trace.
+Where $\mathrm{Tr}$ is the trace.
 
 
 #### Strawman solution
@@ -74,7 +74,7 @@ We can find the optimum solution with some matrix calculus:
 
 First expand
 
-$ Tr(W^{T}X^{T}XW) - Tr(X^{T}WY) + Tr(Y^{T}Y)  + \lambda Tr(W^{T}W)$
+$ \mathrm{Tr}(W^{T}X^{T}XW) - \mathrm{Tr}(X^{T}WY) + \mathrm{Tr}(Y^{T}Y)  + \lambda \mathrm{Tr}(W^{T}W)$
 
 Note I converted the Frobenius norm to a trace
 
@@ -82,13 +82,13 @@ Then take derivative and set to 0.
 
 Note trace and derivative commute
 
-$ Tr(X^{T}XW) - Tr(X^{T}Y) + \lambda I_{d} Tr(W) = 0$
+$ \mathrm{Tr}(X^{T}XW) - \mathrm{Tr}(X^{T}Y) + \lambda I_{d} \mathrm{Tr}(W) = 0$
 
-$ Tr(X^{T}XW) +  \lambda Tr(W) = Tr(X^{T}Y)$
+$ \mathrm{Tr}(X^{T}XW) +  \lambda \mathrm{Tr}(W) = \mathrm{Tr}(X^{T}Y)$
 
-Linearity of Trace
+Linearity of \mathrm{Tr}ace
 
-$ Tr((X^{T}X +  I_{d}\lambda) W) = Tr(X^{T}Y)$
+$ \mathrm{Tr}((X^{T}X +  I_{d}\lambda) W) = \mathrm{Tr}(X^{T}Y)$
 
 This is satisfied when:
 
@@ -99,7 +99,8 @@ is singular.
 that can be done in one line of python.
 
 ```
->>> W = scipy.linalg.solve(X, Y)
+>>> d = X.shape[1]
+>>> W = scipy.linalg.solve(X.dot(X) + lambda*np.eye(d), X.T.dot(Y))
 >>> predictedTestLabels = argmax(Xtest.dot(W), axis=1)
 ```
 ####How did it do?
@@ -133,7 +134,10 @@ This will make the output dimension $4096$
 #### How did it do?
 
 ```
->>> W = scipy.linalg.solve(phi(X, seed=0), Y)
+>>> A = phi(X, seed=0)
+>>> d = A.shape[1]
+>>> lambda = 0.1
+>>> W = scipy.linalg.solve(A.T.dot(A) + lambda*np.eye(d), A.T.dot(Y))
 >>> predictedTestLabels = argmax(phi(Xtest, seed=0).dot(W), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
 0.64
@@ -163,7 +167,9 @@ That is:
 We can let $A = \Phi_{k}(X)$, note A is now $50000 \times 4096k$
 
 
-Remember we want to minimize $\|\|AW - Y\|\|_{F}^{2} + \lambda\|W\|$
+<p>
+Remember we want to minimize $\frac{1}{2}\|AW - Y\|_{F}^{2} + \lambda\|W\|_{F}^{2}$
+</p>
 
 Our previous calculus tells us $W^{*} = (A^{T}A + \lambda I_{4096k})^{-1}A^{T}Y$
 
@@ -188,7 +194,7 @@ I'm going to try $k=25$
 
 ```
 >>> A = phik(X)
->>> W = A.t * np.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y)
+>>> W = A.t.dot(scipy.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y, sym_pos=True))
 >>> predictedTestLabels= np.argmax(phik(Xtest).dot(C), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
 0.75
