@@ -173,13 +173,13 @@ Even for moderate values of k (perhaps over $25$), $(AA^{T} + \lambda I_{d})^{-1
 We can finally use the [useful matrix equality](https://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html)
 to rewrite the prediction vector
 
-$\hat{Y} = AA^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
+$\hat{Y} = AA^{T}(AA^{T} + \lambda I_{50000})^{-1}Y$
 
 Thus our new linear model looks like:
 
 $W = A^{T}(AA^{T} + \lambda I_{50000})^{-1}Y$
 
-Now we never have to invert anything greater than $50k \times 50k$ !
+Now we never have to invert anything greater than $50000 \times 50000$ !
 
 I'm going to try $k=25$
 
