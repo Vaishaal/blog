@@ -8,8 +8,8 @@ categories: ml
 
 In this post I will walk through a concrete application of [a matrix equality](http://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html) to speed up the training process of a simple image classification pipeline.
 
-**Note: I have some pseudo-code snippets in this post, but I have omitted details on making this method
-fast and practical, I will address these practical concerns and provide code in a follow up post**
+__**Note: I have pseudo-code snippets in this post, but I have omitted some practical implementation details.
+I will address these concerns and provide a concrete implementation in a follow up post**__
 
 #### Background
 I have a relatively small collection of blurry images (32 x 32 rgb pixels) from the cifar data set (50,000 images) from each of 10 classes. The task is to build a
