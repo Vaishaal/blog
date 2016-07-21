@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Using a matrix inequality for (small-scale) image classification"
+title: "Using a matrix equality for (small-scale) image classification"
 date: 2016-07-20
 visible: 1
 categories: ml
 ---
 
-In this post I will walk through a concrete application of [a matrix inequality](http://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html) to speed up the training process of a simple image classification pipeline.
+In this post I will walk through a concrete application of [a matrix equality](http://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html) to speed up the training process of a simple image classification pipeline.
 
 **Note: I have some pseudo-code snippets in this post, but I have omitted details on making this method
 fast and practical, I will address these practical concerns and provide code in a follow up post**
@@ -161,7 +161,7 @@ And our prediction vector would be $\hat{Y} = A(A^{T}A + \lambda I_{d})^{-1}A^{T
 
 Even for moderate values of k (perhaps over $25$), $(AA^{T} + \lambda I_{d})^{-1}$ becomes very hard to compute (since the inverse scales as $d^{3}$).
 
-We can finally use the [useful matrix inequality](https://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html)
+We can finally use the [useful matrix equality](https://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html)
 to rewrite the prediction vector
 
 $\hat{Y} = AA^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
@@ -186,7 +186,7 @@ I'm going to try $k=25$
 
 yay!
 
-
+#### You skipped some steps!
 
 There are a couple key details I left out of this post. Both are issues around
 making the above method practical (even on small datasets like CIFAR-10).
