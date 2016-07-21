@@ -61,7 +61,7 @@ which means I'll treat the matrices XW and Y as large vectors and use the standa
 norm.
 
 Note:
-$\|X\|_{F}^{2} = Tr(X^{T}X)$
+$\|\|X\|\|_{F}^{2} = Tr(X^{T}X)$
 
 Where $Tr$ is the trace.
 
