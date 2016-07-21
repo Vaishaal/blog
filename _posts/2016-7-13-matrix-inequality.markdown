@@ -1,12 +1,15 @@
 ---
 layout: post
 title: "Using a matrix inequality for (small-scale) image classification"
-date: 2016-07-13
-visible: false
+date: 2016-07-20
+visible: 1
 categories: ml
 ---
 
 In this post I will walk through a concrete application of [a matrix inequality](http://people.eecs.berkeley.edu/~stephentu/blog/matrix-analysis/2016/06/03/matrix-inverse-equality.html) to speed up the training process of a simple image classification pipeline.
+
+**Note: I have some pseudo-code snippets in this post, but I have omitted details on making this method
+fast and practical, I will address these practical concerns and provide code in a follow up post**
 
 #### Background
 I have a relatively small collection of blurry images (32 x 32 rgb pixels) from the cifar data set (50,000 images) from each of 10 classes. The task is to build a
@@ -92,7 +95,7 @@ that can be done in one line of python.
 ####How did it do?
 ```
 >>> (predictedTestLabels == labels)/float(len(labels))
-0.23
+0.373
 ```
 
 ...Ouch
@@ -112,8 +115,10 @@ I'm lazy so I don't have time to add a lot of layers, so it'll be a one layer CN
 Furthermore I'm really lazy so I'm not going to train the network.  So $\Phi$ is a
 *random*, *single layer* convolutional neural network.
 
-Specifically I used a network with $6 x 6$ patches, $1024$ filters, a cosine nonlinearity and a average pooler to $2 x 2$.
+<p>
+Specifically I used a network with $6 x 6$ patches, $1024$ filters, a RELU nonlinearity and a max pooler to $2 x 2$.
 This will make the output dimension $4096$
+</p>
 
 #### How did it do?
 
@@ -121,12 +126,12 @@ This will make the output dimension $4096$
 >>> W = scipy.linalg.solve(phi(X, seed=0), Y)
 >>> predictedTestLabels = argmax(phi(Xtest, seed=0).dot(W), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
-0.65
+0.64
 ```
 
 Holy smokes batman!
 
-thats a big jump. But still very far from state of the art.
+thats a big jump. But we can do better.
 
 ####Tinman
 Since our $\Phi$ is just a random map, what if we "lift" X
@@ -140,7 +145,7 @@ That is:
 
 
 ```
->>> k = 100
+>>> k = 25
 >>> def phik(X):
         return np.hstack(map(lambda i: phi(X, seed=i), range(k)))
 ```
@@ -163,9 +168,11 @@ $\hat{Y} = AA^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
 
 Thus our new linear model looks like:
 
-$W = A^{T}(AA^{T} + \lambda I_{50k})^{-1}Y$
+$W = A^{T}(AA^{T} + \lambda I_{50000})^{-1}Y$
 
 Now we never have to invert anything greater than $50k \times 50k$ !
+
+I'm going to try $k=25$
 
 ####How did it do?
 
@@ -174,22 +181,25 @@ Now we never have to invert anything greater than $50k \times 50k$ !
 >>> W = A.t * np.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y)
 >>> predictedTestLabels= np.argmax(phik(Xtest).dot(C), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
-0.80
+0.75
 ```
 
 yay!
 
 
 
-There are a couple key details I left out of this post.
+There are a couple key details I left out of this post. Both are issues around
+making the above method practical (even on small datasets like CIFAR-10).
+
 One is the actual efficient computation of $\Phi$, this step can
-be easily parallelized or sped up using vector operations.
+be easily parallelized or sped up using vector operations (or both).
 
 The actual observed behavior is that the test accuracy climbs as the number of
 random features are accumulated, so we want to push $k$ as large as possible.
-But we want to avoid memory problems when $n \times d$ gets too large.
+But we also want to avoid memory problems when $n \times d$ gets too large.
+So we want to avoid materializing X.
 
-I will cover both issues in my next post.
+I will cover both issues in my next post (and provide code!).
 
 
 
