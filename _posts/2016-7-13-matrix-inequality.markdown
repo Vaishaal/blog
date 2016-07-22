@@ -100,7 +100,7 @@ that can be done in one line of python.
 
 ```
 >>> d = X.shape[1]
->>> W = scipy.linalg.solve(X.dot(X) + lambda*np.eye(d), X.T.dot(Y))
+>>> W = scipy.linalg.solve(X.dot(X) + lambdav*np.eye(d), X.T.dot(Y))
 >>> predictedTestLabels = argmax(Xtest.dot(W), axis=1)
 ```
 ####How did it do?
@@ -136,8 +136,8 @@ This will make the output dimension $4096$
 ```
 >>> A = phi(X, seed=0)
 >>> d = A.shape[1]
->>> lambda = 0.1
->>> W = scipy.linalg.solve(A.T.dot(A) + lambda*np.eye(d), A.T.dot(Y))
+>>> lambdav = 0.1
+>>> W = scipy.linalg.solve(A.T.dot(A) + lambdav*np.eye(d), A.T.dot(Y))
 >>> predictedTestLabels = argmax(phi(Xtest, seed=0).dot(W), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
 0.64
@@ -161,7 +161,7 @@ That is:
 ```
 >>> k = 25
 >>> def phik(X):
-        return np.hstack(map(lambda i: phi(X, seed=i), range(k)))
+        return np.hstack(map(lambdav i: phi(X, seed=i), range(k)))
 ```
 
 We can let $A = \Phi_{k}(X)$, note A is now $50000 \times 4096k$
@@ -194,7 +194,7 @@ I'm going to try $k=25$
 
 ```
 >>> A = phik(X)
->>> W = A.t.dot(scipy.linalg.solve(A.dot(A.t) + lambda * np.eye(n), Y, sym_pos=True))
+>>> W = A.t.dot(scipy.linalg.solve(A.dot(A.t) + lambdav * np.eye(n), Y, sym_pos=True))
 >>> predictedTestLabels= np.argmax(phik(Xtest).dot(C), axis=1)
 >>> (predictedTestLabels == labels)/float(len(labels))
 0.75
