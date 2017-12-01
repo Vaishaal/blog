@@ -2,7 +2,7 @@
 layout: post
 title: "Using a matrix equality for (small-scale) image classification"
 date: 2016-07-20
-visible: 1
+visible: 0
 categories: ml
 comments: true
 ---
