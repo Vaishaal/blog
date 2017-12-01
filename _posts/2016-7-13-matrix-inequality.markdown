@@ -215,8 +215,3 @@ random features are accumulated, so we want to push $k$ as large as possible.
 But we also want to avoid memory problems when $n \times d$ gets too large.
 So we want to avoid materializing X.
 
-I will cover both issues in my next post (and provide code!).
-
-
-
-
